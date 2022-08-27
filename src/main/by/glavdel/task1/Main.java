@@ -1,12 +1,15 @@
-package by.glavdel.Task1;
-
-import java.util.Random;
+package main.by.glavdel.task1;
 
 public class Main {
-    public static final int ROW_LENGHT = 3;
+    public static final int ROW_LENGHT = 5;
     private static final int COLUMN_LENGHT = 5;
-    public static final int MAX_VALUE_ELEMENT = 100;
     private static final int[][] array = new int[ROW_LENGHT][COLUMN_LENGHT];
+
+    public static int multiplierForRandom = 37;
+    public static int summandForRandom = 119;
+    public static int dividerForRandom = 113;
+    public static int randomNumber = 1;
+
 
     private static final double[] results = new double[3];
 
@@ -41,11 +44,16 @@ public class Main {
     }
 
     private static void initArray() {
-        Random random = new Random();
         for (int i = 0; i < ROW_LENGHT; i++) {
             for (int j = 0; j < COLUMN_LENGHT; j++) {
-                array[i][j] = random.nextInt(MAX_VALUE_ELEMENT);
+                array[i][j] = getNextInt();
             }
         }
+    }
+
+    private static int getNextInt() {
+        randomNumber = (multiplierForRandom * randomNumber + summandForRandom)
+                * (-1) % dividerForRandom;
+        return randomNumber;
     }
 }
