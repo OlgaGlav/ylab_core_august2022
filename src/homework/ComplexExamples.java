@@ -1,6 +1,7 @@
 package homework;
 
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -73,8 +74,9 @@ public class ComplexExamples {
         System.out.println("**************************************************");
         System.out.println("Task2");
         System.out.println();
-
-        System.out.println(Arrays.toString(task2()));
+        int[] data = {3, 4, 2, 7};
+        int neededSumma = 10;
+        System.out.println(Arrays.toString(task2(data, neededSumma)));
 
         System.out.println();
         System.out.println("**************************************************");
@@ -107,6 +109,7 @@ public class ComplexExamples {
     private static void task1() {
         Arrays.stream(RAW_DATA)
                 .distinct()
+                .sorted(Comparator.comparing(Person::getId))
                 .collect(Collectors.groupingBy(Person::getName))
                 .forEach((key, value) -> {
                     System.out.println("Key:" + key);
@@ -119,23 +122,24 @@ public class ComplexExamples {
 
         [3, 4, 2, 7], 10 -> [3, 7] - вывести пару менно в скобках, которые дают сумму - 10
      */
-    private static int[] task2() {
-        int[] data = {3, 4, 2, 7};
-        int neededSumma = 10;
+    private static int[] task2(int[] data, int neededSumma) {
+        if (data == null) {
+            throw new NullPointerException("Сatch and treat NullPointerException");
+        }
         Arrays.sort(data);
-
         int j = data.length - 1;
         int i = 0;
         while (i < j) {
             if (data[i] + data[j] == neededSumma) {
                 return new int[]{data[i], data[j]};
-            } else if (data[i] + data[j] < neededSumma) {
+            }
+            if (data[i] + data[j] < neededSumma) {
                 i++;
             } else {
                 j--;
             }
         }
-        return new int[2];
+        throw new RuntimeException("Numbers are not found");
     }
 
     /*
@@ -148,34 +152,28 @@ public class ComplexExamples {
                    fuzzySearch("cwheeel", "cartwheel"); // false
                    fuzzySearch("lw", "cartwheel"); // false
         */
-    private static boolean fuzzySearch(String first, String second) {
-        byte[] lettersFirst = first.getBytes();
-        byte[] lettersSecond = second.getBytes();
+    public static boolean fuzzySearch(String first, String second) {
 
-        int lengthFirst = lettersFirst.length;
-        int lengthSecond = lettersSecond.length;
-
-        int indicatorFirst = 0;
-        int indicatorSecond = 0;
-
-        while (indicatorFirst < lengthFirst && indicatorSecond < lengthSecond) {
-            if ((lengthFirst - indicatorFirst) <= (lengthSecond - indicatorSecond)) {
-                if (lettersFirst[indicatorFirst] == lettersSecond[indicatorSecond]) {
-                    indicatorFirst++;
-                    indicatorSecond++;
-                } else {
-                    indicatorSecond++;
-                }
-            } else {
-                System.out.println(false);
-                return false;
-            }
+        if (first == null || second == null) {
+            throw new NullPointerException("Can't check. Сatch and treat NullPointerException");
         }
-        if (indicatorSecond > lengthSecond && indicatorFirst < lengthFirst) {
-            System.out.println(false);
+
+        if (first.length() > second.length()) {
             return false;
         }
-        System.out.println(true);
+
+        int indicatorSecond = 0;
+        char[] firstChars = first.toCharArray();
+
+        for (int i = 0; i < firstChars.length; i++) {
+            int index = second.indexOf(firstChars[i], indicatorSecond);
+            if (index == -1 ||
+                    //if the length of the remaining string is greater than the number of letters in the second word
+                    ((firstChars.length - i) > (second.length() - index))) {
+                return false;
+            }
+            indicatorSecond = index + 1;
+        }
         return true;
     }
 }
