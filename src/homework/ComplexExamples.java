@@ -124,7 +124,8 @@ public class ComplexExamples {
      */
     private static int[] task2(int[] data, int neededSumma) {
         if (data == null) {
-            throw new NullPointerException("Сatch and treat NullPointerException");
+            System.out.println("Can't check. Сatch and treat NullPointerException");
+            return new int[0];
         }
         Arrays.sort(data);
         int j = data.length - 1;
@@ -155,7 +156,8 @@ public class ComplexExamples {
     public static boolean fuzzySearch(String first, String second) {
 
         if (first == null || second == null) {
-            throw new NullPointerException("Can't check. Сatch and treat NullPointerException");
+            System.out.println("Can't check. Сatch and treat NullPointerException");
+            return false;
         }
 
         if (first.length() > second.length()) {
