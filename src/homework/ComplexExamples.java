@@ -1,8 +1,6 @@
 package homework;
 
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class ComplexExamples {
@@ -76,7 +74,7 @@ public class ComplexExamples {
         System.out.println();
         int[] data = {3, 4, 2, 7};
         int neededSumma = 10;
-        System.out.println(Arrays.toString(task2(data, neededSumma)));
+        System.out.println(task2(data, neededSumma).get());
 
         System.out.println();
         System.out.println("**************************************************");
@@ -122,17 +120,16 @@ public class ComplexExamples {
 
         [3, 4, 2, 7], 10 -> [3, 7] - вывести пару менно в скобках, которые дают сумму - 10
      */
-    private static int[] task2(int[] data, int neededSumma) {
+    private static Optional<List<Integer>> task2(int[] data, int neededSumma) {
         if (data == null) {
-            System.out.println("Can't check. Сatch and treat NullPointerException");
-            return new int[0];
+            return Optional.empty();
         }
         Arrays.sort(data);
         int j = data.length - 1;
         int i = 0;
         while (i < j) {
             if (data[i] + data[j] == neededSumma) {
-                return new int[]{data[i], data[j]};
+                return Optional.of(Arrays.asList(data[i], data[j]));
             }
             if (data[i] + data[j] < neededSumma) {
                 i++;
@@ -140,7 +137,7 @@ public class ComplexExamples {
                 j--;
             }
         }
-        throw new RuntimeException("Numbers are not found");
+        return Optional.empty();
     }
 
     /*
@@ -153,15 +150,14 @@ public class ComplexExamples {
                    fuzzySearch("cwheeel", "cartwheel"); // false
                    fuzzySearch("lw", "cartwheel"); // false
         */
-    public static boolean fuzzySearch(String first, String second) {
+    public static Optional<Boolean> fuzzySearch(String first, String second) {
 
         if (first == null || second == null) {
-            System.out.println("Can't check. Сatch and treat NullPointerException");
-            return false;
+            return Optional.empty();
         }
 
         if (first.length() > second.length()) {
-            return false;
+            return Optional.of(false);
         }
 
         int indicatorSecond = 0;
@@ -172,10 +168,10 @@ public class ComplexExamples {
             if (index == -1 ||
                     //if the length of the remaining string is greater than the number of letters in the second word
                     ((firstChars.length - i) > (second.length() - index))) {
-                return false;
+                return Optional.of(false);
             }
             indicatorSecond = index + 1;
         }
-        return true;
+        return Optional.of(true);
     }
 }
